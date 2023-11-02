@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/services', [ServicesController::class, 'index']);
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/user', [UserController::class, 'show']);
+  Route::post('/reservations', [ReservationController::class, 'store']);
+  Route::get('/customers/{id}/reservations', [ReservationController::class, 'index']);
+  Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
+});

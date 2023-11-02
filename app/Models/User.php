@@ -28,19 +28,26 @@ use Laravel\Sanctum\HasApiTokens;
  *      example="jhon@gmail.com"
  * 	),
  * 	@OA\Property(
- * 		property="password",
- * 		type="string",
- *      example="jhon123"
+ * 		property="email_verified_at",
+ * 		type="date-time",
+ *      example=null,
  * 	),
  * 	@OA\Property(
  * 		property="updated_at",
- * 		type="date",
+ * 		type="date-time",
  *      example="2023-01-01T18:36:12.000000Z"
  * 	),
  * 	@OA\Property(
  * 		property="created_at",
- * 		type="date",
+ * 		type="date-time",
  *      example="2023-01-01T18:36:12.000000Z"
+ * 	),
+ * 	@OA\Property(
+ * 		property="role",
+ * 		type="string",
+ *      example="customer",
+ *      enum={"customer", "admin"},
+ *      description="The role of the user with default value 'customer'"
  * 	),
  * )
  */
@@ -78,4 +85,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
 }

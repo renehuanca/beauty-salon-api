@@ -13,9 +13,9 @@
         "/register": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "authentication"
                 ],
-                "summary": "Register a new user",
+                "summary": "Register a new customer user",
                 "operationId": "0903f2e0df1a8857bee538fc055417f0",
                 "requestBody": {
                     "content": {
@@ -30,6 +30,14 @@
                                         "type": "string",
                                         "format": "email",
                                         "example": "jhon@gmail.com"
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "081234567890"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "AV. 1, No. 2, 3rd Floor"
                                     },
                                     "password": {
                                         "type": "string",
@@ -47,7 +55,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -57,7 +65,36 @@
                                             "example": "0|WYgnFtfJU6oMR8Q852lFPjtyjRSuSHjolb98q9kx"
                                         },
                                         "user": {
-                                            "$ref": "#/components/schemas/User"
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "jhon@gmail.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "customer"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-02T14:03:55.000000Z"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-02T14:03:55.000000Z"
+                                                },
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -74,7 +111,7 @@
         "/login": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "authentication"
                 ],
                 "summary": "Login a new user",
                 "operationId": "2dd578ff7aba2721293dac66833b27d1",
@@ -100,7 +137,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Successfull operation",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -123,10 +160,276 @@
                     }
                 }
             }
+        },
+        "/reservations": {
+            "post": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Create a new reservation",
+                "operationId": "1aabc7d432cc652e63cfc3fb514132cd",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "service_id": {
+                                        "type": "number",
+                                        "example": "1"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-01-01"
+                                    },
+                                    "time": {
+                                        "type": "time",
+                                        "example": "12:30"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/customers/{id}/reservations": {
+            "get": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Get reservations of customers",
+                "operationId": "f9972a87dc3813a38312b1fa31cfde8c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The customer id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Service"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/reservations/{id}": {
+            "delete": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Delete the reservation",
+                "operationId": "fa964cce3285d6c10989429c544421ca",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The reservation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/services": {
+            "get": {
+                "tags": [
+                    "services"
+                ],
+                "summary": "Get all services",
+                "operationId": "0f76dda9be6628c47b978d3b7077529a",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Service"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get the current user",
+                "operationId": "366f803ccd51a727a8233c1bb8a35cbc",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "Reservation": {
+                "title": "Reservation",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "customer_id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "service_id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-01-01"
+                    },
+                    "time": {
+                        "type": "time",
+                        "example": "10:10"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "confirmed",
+                            "cancelled"
+                        ],
+                        "example": "pending"
+                    },
+                    "updated_at": {
+                        "type": "date-time",
+                        "example": "2023-01-01T18:36:12.000000Z"
+                    },
+                    "created_at": {
+                        "type": "date-time",
+                        "example": "2023-01-01T18:36:12.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "title": "Service",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "manicure"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Manicure of nails"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": "10.50"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-01-01T18:36:12.000000Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-01-01T18:36:12.000000Z"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "properties": {
@@ -142,28 +445,52 @@
                         "type": "string",
                         "example": "jhon@gmail.com"
                     },
-                    "password": {
-                        "type": "string",
-                        "example": "jhon123"
+                    "email_verified_at": {
+                        "type": "date-time",
+                        "example": null
                     },
                     "updated_at": {
-                        "type": "string",
-                        "format": "date",
+                        "type": "date-time",
                         "example": "2023-01-01T18:36:12.000000Z"
                     },
                     "created_at": {
-                        "type": "string",
-                        "format": "date",
+                        "type": "date-time",
                         "example": "2023-01-01T18:36:12.000000Z"
+                    },
+                    "role": {
+                        "description": "The role of the user with default value 'customer'",
+                        "type": "string",
+                        "enum": [
+                            "customer",
+                            "admin"
+                        ],
+                        "example": "customer"
                     }
                 },
                 "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
     },
     "tags": [
         {
-            "name": "Authentication"
+            "name": "authentication"
+        },
+        {
+            "name": "reservations"
+        },
+        {
+            "name": "services"
+        },
+        {
+            "name": "users"
         }
     ]
 }
