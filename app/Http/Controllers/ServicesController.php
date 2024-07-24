@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 /**
@@ -27,7 +28,7 @@ class ServicesController extends Controller
      *      )
      * )
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(Service::all(), Response::HTTP_OK);
     }

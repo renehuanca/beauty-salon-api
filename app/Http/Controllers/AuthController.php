@@ -107,7 +107,7 @@ class AuthController extends Controller
      *     @OA\Response(response="401", description="Unauthorized"),
      * )
      */
-    public function login(Request $request)
+    public function login(Request $request): Response
     {
         $credentials = $request->only('email', 'password');
 

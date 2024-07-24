@@ -41,7 +41,7 @@ class ReservationController extends Controller
      *      @OA\Response(response="422", description="Unprocessable Content"),
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $validator = Validator::make($request->all(), [
             'service_id' => 'required|integer',
@@ -91,7 +91,7 @@ class ReservationController extends Controller
      *     @OA\Response(response="404", description="Not Found"),
      * )
      */
-    public function index(string $id)
+    public function index(string $id): Response
     {
         $customer = Customer::find($id);
 
@@ -126,7 +126,7 @@ class ReservationController extends Controller
      *      @OA\Response(response="404", description="Not Found"),
      * )
      */
-    public function destroy(string $id)
+    public function destroy(string $id): Response
     {
         try {
             $reservation = Reservation::find($id);
