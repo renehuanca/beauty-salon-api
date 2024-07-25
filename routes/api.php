@@ -23,6 +23,8 @@ Route::get('/services', [ServicesController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/user', [UserController::class, 'show']);
+  Route::put('/users', [UserController::class, 'update']);
+
   Route::post('/reservations', [ReservationController::class, 'store']);
   Route::get('/customers/{id}/reservations', [ReservationController::class, 'index']);
   Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
