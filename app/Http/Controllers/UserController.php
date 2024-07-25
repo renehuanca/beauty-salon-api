@@ -96,4 +96,27 @@ class UserController extends Controller
 
         return response($user, Response::HTTP_OK);
     }
+
+    /**
+     * @OA\Delete(
+     *      path="/users",
+     *      tags={"users"},
+     *      summary="Delete user account",
+     *      security={{"sanctum": {}}},
+     *      @OA\Response(response="200", description="Successful operation"),
+     *      @OA\Response(response="401", description="Unauthorized"),
+     * )
+     */
+    public function destroy(Request $request): Response
+    {
+        try {
+            $user = User::find($request->user()->id);
+            $user->delete();
+            $user->customer->delete();
+
+            return response($user, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response(['errors' => 'Customer not found'], Response::HTTP_NOT_FOUND);
+        }
+    }
 }
