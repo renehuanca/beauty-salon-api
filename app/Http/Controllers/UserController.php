@@ -20,7 +20,7 @@ class UserController extends Controller
 {
     /**
      *  @OA\Get(
-     *     path="/user",
+     *     path="/users/me",
      *     tags={"users"},
      *     summary="Get the current user",
      *     security={{"sanctum":{}}},

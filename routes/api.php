@@ -22,7 +22,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/services', [ServicesController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
-  Route::get('/user', [UserController::class, 'show']);
+  Route::get('/users/me', [UserController::class, 'show']);
   Route::put('/users', [UserController::class, 'update']);
   Route::delete('/users', [UserController::class, 'destroy']);
 
